@@ -10,8 +10,8 @@
 </head>
 <style>
   body{
-    background-image:url("./images/country.jpg");
-   background-size:cover;
+    background-image:url("../images/country.jpg");
+   background-size:cover
   }
   .split {
   height: 100%;
@@ -92,7 +92,7 @@ margin-top: 50px;
 }
 .form-control {
     
-    width: 60%!important;
+    width: 60%;
     margin-left: 50px;
 }
 .btn{
@@ -120,8 +120,11 @@ margin-top: 50px;
                 </ul> -->
                 
               </div>
-               <input tupe= "text" class="form-control mt-3" id="c_name" placeholder="Country Name">
-               <button class="btn mt-3" onclick="getcountryDetails()">FETCH DATA</button>
+               <!-- <input tupe= "text" class="form-control mt-3" id="c_name" placeholder="Country Name"> -->
+               <select name="country" type="submit" class="form-select" onchange="getcountryDetails()" id="dropdown">
+                <option>----------- Select Country -----------</option>
+              </select>
+               <!-- <button class="btn mt-3" onclick="getcountryDetails()">FETCH DATA</button> -->
         </div>
         <div class="row "></div>
         <div class="col-lg-6 col-sm-6" id="datas">
@@ -142,7 +145,7 @@ margin-top: 50px;
  
 
 
-
+ getAllCountryDetails()
 
     function displayvalue(data)
     {
@@ -176,7 +179,19 @@ let html_data=`<div class="card" style="width: 18rem;">
 datas.innerHTML=html_data;
 
     }
-   
+    function listCountry(country_data){
+      console.log(country_data);
+        let html_data="";
+        for (let c_name of country_data){
+            html_data+=`<option>${c_name.name}</option>`;
+        }
+        dropdown.innerHTML=html_data;
+
+    }
+    function getAllCountryDetails(){
+      fetch("https://restcountries.eu/rest/v2/all").then(country=>{if(country.ok){return country.json()}else{throw new Error("Fetching failed from url")}}).then(data=>listCountry(data))
+     
+    }
 
         // 
         // let url=`https://restcountries.eu/rest/v2/name/${country_name}?fullText=true`
@@ -191,10 +206,8 @@ datas.innerHTML=html_data;
         //              displayvalue(country_data);
        
         function getcountryDetails(){
-          let country_name=c_name.value;
-        // fetch("https://restcountries.eu/rest/v2/name/${country_name}?fullText=true").then(country=>country_data.json()).then
-        //        (data=>displayvalue(country_data))    
-
+          let country_name=dropdown.value;
+    
         let url=`https://restcountries.eu/rest/v2/name/${country_name}?fullText=true`
         fetch(url).then(country_data=>country_data.json()).then(data=>{
           displayvalue(data)
@@ -204,9 +217,6 @@ datas.innerHTML=html_data;
         
   
 </script>
-<!-- <div class="col-lg-6 col-sm-12 split right">
-  <img src="${flag}" class="flagimg">
-</div> -->
 </html>
 
 
